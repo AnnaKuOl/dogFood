@@ -10,30 +10,40 @@ import './index.css';
 // import data from "../../assets/data.json";
 import api from '../../utils/api';
 import useDebounce from '../../hooks/useDebounce';
+import Spinner from '../Spinner';
 
 
 function App() {
   const [cards, setCards] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [userCurrent, setUserCurrent] = useState(null);
+  const [isLoader, setIsLoader ] = useState(false);
   const debounceSearchQuery = useDebounce(searchQuery, 500)
 
   const handleRequest = () => {
     // const filterCards = cards.filter( item => item.name.toLowerCase().includes(searchQuery.toLowerCase()));    
     // setCards(filterCards);
+    setIsLoader(true)
     api.search(debounceSearchQuery)
       .then((newCards)=>{
         setCards(newCards)
       })
       .catch(err => console.log (err) )
+      .finally(()=>{
+        setIsLoader(false)
+      })
   }
   useEffect(()=>{
+    setIsLoader(true)
     Promise.all([api.getProductsList(), api.getUserInfo()])
       .then(([cardsData, userInfo])=>{
         setUserCurrent(userInfo)
         setCards(cardsData.products)
       } )
       .catch(err => console.log (err) )
+      .finally(()=>{
+        setIsLoader(false)
+      })
     
   },[])
 /* Поиск в реальном времени */
@@ -87,7 +97,11 @@ function App() {
         <SearchInfo searchText = {searchQuery} searchCount= {cards.length}/>
         <Sort/>
         <div className="content__cards">
-          <CardList goods = {cards} onLiked ={handleLiked} userCurrent={userCurrent} />
+          { isLoader 
+            ? <Spinner/>
+            : <CardList goods = {cards} onLiked ={handleLiked} userCurrent={userCurrent} />
+          }
+          
         </div>      
     
      </main>

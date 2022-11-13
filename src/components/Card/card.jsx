@@ -5,7 +5,7 @@ import {ReactComponent as Save} from "./save.svg";
 
 const Card = ({name, discount, _id, likes, wight, description, pictures, price, userCurrent, onLiked}) => {
 	const new_price = Math.round(price - price*discount/100);
-	const isLiked = likes.some( (id) => id === userCurrent._id );
+	const isLiked = likes.some( (id) => id === userCurrent?._id );
 	function handleLiked() {
 		onLiked({_id, likes});
 	}
