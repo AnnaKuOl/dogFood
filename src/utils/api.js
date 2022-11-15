@@ -11,6 +11,11 @@ class Api {
             headers: this._headers
         }).then(onResponce)
     }
+    getProductbyId(prodId){
+        return fetch(`${this._baseURL}/products/${prodId}`, {
+            headers: this._headers
+        }).then(onResponce)
+    }
     getUserInfo(){
         return fetch(`${this._baseURL}/v2/group-7/users/me`, {
             headers: this._headers

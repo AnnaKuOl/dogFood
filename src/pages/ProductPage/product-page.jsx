@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "../../components/Footer/footer";
 import Header from "../../components/Header/header";
 import Logo from "../../components/Logo/logo";
@@ -33,9 +33,22 @@ export const ProductPage = () => {
     e.preventDefault();
     handleRequest();
   };
-  const handleLiked = (product) => {
-    const isLike = isLiked(product.likes, userCurrent?._id);
+  useEffect(()=>{
+    setIsLoader(true) 
+    Promise.all([api.getProductbyId('622c779c77d63f6e70967d1c'), api.getUserInfo()])
+      .then(([productData, userInfo])=>{
+        setUserCurrent(userInfo) 
+        setProduct(productData) 
+      } )
+      .catch(err => console.log (err) )
+      .finally(()=>{
+        setIsLoader(false) 
+      })
+    
+  },[])
 
+  const handleLiked = () => {
+    const isLike = isLiked(product.likes, userCurrent?._id);
     api.changeLikePoduct(product._id, isLike)
         .then((newProduct) => {
             setProduct(newProduct);
@@ -55,7 +68,7 @@ export const ProductPage = () => {
         <div className="content__cards">
             {isLoader 
             ? <Spinner /> 
-            : <Product/>
+            : <Product {...product} currentUser = {userCurrent} onProductLike = {handleLiked}/>
             } 
         </div>
       </main>
