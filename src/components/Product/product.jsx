@@ -34,7 +34,7 @@ const Product = ({pictures, likes=[], tags, _id, name, price, discount, wight, d
                         </div>
                         <a href="#" className={cn('btn', 'btn_type_primary', s.cart)}>В корзину</a>
                     </div>
-                    <button className={cn(s.favorite)} onClick = {onProductLike}>
+                    <button className = {cn(s.favorite, {[s.favoriteActive]: isLike }) } onClick = {onProductLike}>
                         <Save/>
                          <span>{isLike ? 'В избранном' : 'В избранное'}</span>
                     </button>

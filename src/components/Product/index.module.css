@@ -171,14 +171,18 @@
 	align-items: center;
 	gap: 10px;
 	margin-bottom: 20px;
+	cursor: pointer;
 }
 
 .favorite svg {
 	fill: #ffffff;
+	stroke-width: 1px;
+	stroke: #7b8e98;
 }
 
 .favoriteActive svg {
-	fill: #000000;
+	fill: #F44336;
+	stroke-width: 0;
 }
 
 @media (max-width: 1000px) {

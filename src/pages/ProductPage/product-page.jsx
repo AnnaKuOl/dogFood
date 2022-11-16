@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, useCallback } from "react";
 import Footer from "../../components/Footer/footer";
 import Header from "../../components/Header/header";
 import Logo from "../../components/Logo/logo";
@@ -10,16 +11,17 @@ import Spinner from "../../components/Spinner";
 import api from "../../utils/api";
 import { isLiked } from "../../utils/product";
 
+const ID_PRODUCT = '622c779c77d63f6e70967d1c';
+
 export const ProductPage = () => {
   const [product, setProduct] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
+ 
   const [userCurrent, setUserCurrent] = useState(null);
-  const [isLoader, setIsLoader] = useState(false);
+  const [isLoader, setIsLoader] = useState(true);
 
-  const handleRequest = () => {
+  const handleRequest = useCallback((searchQuery) => {
     setIsLoader(true);
-    api
-      .search(searchQuery)
+    api.search(searchQuery)
       .then((newCards) => {
         console.log(newCards);
       })
@@ -27,15 +29,12 @@ export const ProductPage = () => {
       .finally(() => { 
         setIsLoader(false);
       });
-  };
+  }, [])
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    handleRequest();
-  };
+ 
   useEffect(()=>{
     setIsLoader(true) 
-    Promise.all([api.getProductbyId('622c779c77d63f6e70967d1c'), api.getUserInfo()])
+    Promise.all([api.getProductbyId(ID_PRODUCT), api.getUserInfo()])
       .then(([productData, userInfo])=>{
         setUserCurrent(userInfo) 
         setProduct(productData) 
@@ -47,20 +46,20 @@ export const ProductPage = () => {
     
   },[])
 
-  const handleLiked = () => {
+  const handleLiked = useCallback(() => {
     const isLike = isLiked(product.likes, userCurrent?._id);
     api.changeLikePoduct(product._id, isLike)
         .then((newProduct) => {
             setProduct(newProduct);
         });
-  };
+  }, [product, userCurrent]);
 
   return (
     <>
       <Header>
         <>
           <Logo className="logo logo__place-header" />
-          <Search onSubmit={handleFormSubmit} />
+          <Search onSubmit={handleRequest} />
         </>
       </Header>
       <main className="container content">
