@@ -12,6 +12,9 @@ import api from '../../utils/api';
 import useDebounce from '../../hooks/useDebounce';
 import Spinner from '../Spinner';
 import { isLiked } from '../../utils/product';
+import { CatalogPage } from '../../pages/CatalogPage/catalog-page';
+import { ProductPage } from '../../pages/ProductPage/product-page';
+import { Route, Routes } from 'react-router-dom';
 
 
 function App() {
@@ -34,6 +37,23 @@ function App() {
         setIsLoader(false) //отключение спинера
       })
   }
+
+  // const handleRequest = useCallback((searchQuery) => {
+  //   setIsLoader(true);
+  //   api.search(searchQuery)
+  //     .then((newCards) => {
+  //       console.log(newCards);
+  //     })
+  //     .catch((err) => console.log(err))
+  //     .finally(() => { 
+  //       setIsLoader(false);
+  //     });
+  // }, [])
+
+ 
+
+
+
   useEffect(()=>{
     setIsLoader(true) //запуск спинера навремя отправки на сервер запроса и получения ответа
     Promise.all([api.getProductsList(), api.getUserInfo()]) // промис для объединения запросов на текущего пользователя и каталог карточек
@@ -100,14 +120,24 @@ function App() {
       </Header>
      <main className="container content">
         <SearchInfo searchText = {searchQuery} searchCount= {cards.length}/>
-        <Sort/>
-        <div className="content__cards">
-          { isLoader 
-            ? <Spinner/>
-            : <CardList goods = {cards} onLiked ={handleLiked} userCurrent={userCurrent} />
-          }
-          
-        </div>      
+        
+        <Routes>
+            <Route path='/' element={
+              <CatalogPage 
+              isLoader={isLoader} 
+              handleLiked={handleLiked} 
+              userCurrent={userCurrent} 
+              cards={cards}/>
+            }/>
+            <Route path='/product' element={
+              <ProductPage 
+                userCurrent={userCurrent} 
+                isLoader={isLoader} />
+            }/>
+
+        </Routes>
+        
+        
     
      </main>
      <Footer/>
