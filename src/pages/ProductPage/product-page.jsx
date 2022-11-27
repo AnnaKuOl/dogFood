@@ -1,14 +1,17 @@
 
 import { useEffect, useState, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import Product from "../../components/Product/product";
 import Spinner from "../../components/Spinner";
 import api from "../../utils/api";
 import { isLiked } from "../../utils/product";
 
-const ID_PRODUCT = '622c779c77d63f6e70967d1c';
+// const ID_PRODUCT = '622c779c77d63f6e70967d1c';
 
 export const ProductPage = ({userCurrent, isLoader }) => {
   const [product, setProduct] = useState(null);
+  const {id} = useParams();
+
 
   // const handleRequest = useCallback((searchQuery) => {
   //   setIsLoader(true);
@@ -25,11 +28,11 @@ export const ProductPage = ({userCurrent, isLoader }) => {
  
   useEffect(()=>{
     // setIsLoader(true) 
-    Promise.all([api.getProductbyId(ID_PRODUCT), api.getUserInfo()])
-      .then(([productData, userInfo])=>{
-        // setUserCurrent(userInfo)
+    api.getProductbyId(id)
+      .then((productData)=>{
+
         setProduct(productData) 
-      } )
+      } )      
       .catch(err => console.log (err) )
       // .finally(()=>{
       //   setIsLoader(false) 

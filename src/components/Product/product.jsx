@@ -4,18 +4,20 @@ import {ReactComponent as Save} from "./img/save.svg"
 import truck from "./img/truck.svg"
 import quality from "./img/quality.svg"
 import {calcDiscountPrice, isLiked, createMarkup} from "../../utils/product.js"
+import { ButtonBack } from "../ButtonBack/button-back";
+import { useNavigate } from "react-router-dom";
 const Product = ({pictures, likes=[], tags, _id, name, price, discount, wight, description, reviews, currentUser, onProductLike }) => {
     const newPrice = calcDiscountPrice(price, discount); 
     const descriptionHTML = createMarkup(description);
     const isLike = isLiked(likes, currentUser?._id)
-
+    const navigate = useNavigate();
     return (
         <>
             <div>
-                <a href="#" className="button-back">Назад</a>
+                <ButtonBack navigate= {navigate}/>
                 <h1 className={s.productTitle}>{name}</h1>
                 <div>
-                <span>Артикул:</span> <b>2388907</b>
+                <span>Артикул:</span> <b>{_id &&_id.slice(0,6)}</b>
                 </div>
                 
             </div>
@@ -25,7 +27,7 @@ const Product = ({pictures, likes=[], tags, _id, name, price, discount, wight, d
                 </div>
                 <div className={s.desc}>
                     <span className={discount ? s.oldPrice : s.price}>{price}&nbsp;₽</span>
-                    {discount && <span className={cn(s.price, 'card__price_type_discount')}>{newPrice}&nbsp;₽</span>}
+                    {!!discount && <span className={cn(s.price, 'card__price_type_discount')}>{newPrice}&nbsp;₽</span>}
                     <div className={s.btnWrap}>
                         <div className={s.left}>
                             <button className={s.minus}>-</button>
