@@ -6,14 +6,17 @@ import quality from "./img/quality.svg"
 import {calcDiscountPrice, isLiked, createMarkup} from "../../utils/product.js"
 import { ButtonBack } from "../ButtonBack/button-back";
 import { useNavigate } from "react-router-dom";
-const Product = ({pictures, likes=[], tags, _id, name, price, discount, wight, description, reviews, currentUser, onProductLike }) => {
+import { useContext } from "react";
+import { UserContext } from "../../context/userContext";
+const Product = ({pictures, likes=[], tags, _id, name, price, discount, wight, description, reviews, onProductLike }) => {
+    const userCurrent = useContext(UserContext)
     const newPrice = calcDiscountPrice(price, discount); 
     const descriptionHTML = createMarkup(description);
-    const isLike = isLiked(likes, currentUser?._id)
+    const isLike = isLiked(likes, userCurrent?._id) 
     const navigate = useNavigate();
     return (
         <>
-            <div>
+            <div >
                 <ButtonBack navigate= {navigate}/>
                 <h1 className={s.productTitle}>{name}</h1>
                 <div>

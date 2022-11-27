@@ -5,7 +5,7 @@ import Logo from "../Logo/logo";
 import Search from "../Search/search";
 import Header from "../Header/header";
 import Sort from "../Sort/sort";
-import SearchInfo from "../SearchInfo/index";
+import SearchInfo from "../SearchInfo/search-info";
 import "./index.css";
 // import data from "../../assets/data.json";
 import api from "../../utils/api";
@@ -14,8 +14,10 @@ import Spinner from "../Spinner";
 import { isLiked } from "../../utils/product";
 import { CatalogPage } from "../../pages/CatalogPage/catalog-page";
 import { ProductPage } from "../../pages/ProductPage/product-page";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, ScrollRestoration } from "react-router-dom";
 import { NotFoundPage } from "../../pages/NotFoundPage/not-found-page";
+import { UserContext } from "../../context/userContext";
+import { CardContext } from "../../context/cardContext";
 
 function App() {
   const [cards, setCards] = useState([]); //состояние карточек
@@ -23,6 +25,8 @@ function App() {
   const [userCurrent, setUserCurrent] = useState(null); ///состояние текущего пользователя
   const [isLoader, setIsLoader] = useState(true); // состояние спиненра
   const debounceSearchQuery = useDebounce(searchQuery, 500); // задержка отправки поискового запроса
+
+  
   /* Функция отправки поискового запроса на север  */
 
   const handleRequest = useCallback(() => {
@@ -76,48 +80,50 @@ function App() {
       .catch((err) => console.log(err));
   };
   /* функция по  изменению лайков на продукте с учетом пользователя, который их проставляет*/
-  const handleLiked = (product) => {
+  const handleLiked = useCallback((product) => {
     const isLike = isLiked(product.likes, userCurrent?._id); // устанавливает значение true/false в зависимости от того лайкал ли это пользователь это товар или нет
 
-    api
-      .changeLikePoduct(product._id, isLike) // отправка измененений по лайкам на сервер
-      .then((newCard) => {
-        //сервер дает в ответ карточку с измененными данными
-        const newProducts = cards.map((card) => {
-          //создаем новый массив с карточками, в котором меняем ту карточку, которая была изменена
-          return card._id === newCard._id ? newCard : card;
-        });
-        setCards(newProducts); //устанавливаем новое состояние карточек продуктов
-      });
-  };
+    return  api.changeLikePoduct(product._id, isLike) // отправка измененений по лайкам на сервер
+      .then((upDateCard) => {
+        const newProducts = cards.map((card) => {       
+          return card._id === upDateCard._id ? upDateCard : card;
+        })
+        setCards(newProducts); 
+        return upDateCard;
+       })
+       
+      }, [userCurrent]);
 
   return (
-    <>
-      <Header user={userCurrent} onUpdateUser={handleUserUpdate}>
+    <UserContext.Provider value={userCurrent}>
+    <CardContext.Provider value ={{handleLiked, cards}} >
+      <Header onUpdateUser={handleUserUpdate}>
         <>
           <Logo className="logo logo__place-header" />
           <Search 
-            // handleChangeInput ={handleChangeInput} 
+            handleChangeInput ={handleChangeInput} 
             handleFormSubmit= {handleFormSubmit}/>
         </>
       </Header>
+
       <main className="container content">
-        <SearchInfo searchText={searchQuery} searchCount={cards.length} />
+        
 
         <Routes>
           <Route  path="/" element={
+              <>
+              <SearchInfo searchText={searchQuery} />
               <CatalogPage
                 isLoader={isLoader}
-                handleLiked={handleLiked}
-                userCurrent={userCurrent}
-                cards={cards}
-              />
+
+              /></>
+              
             }
           />
           <Route 
             path="/product/:id"
             element={
-              <ProductPage userCurrent={userCurrent} isLoader={isLoader} />
+              <ProductPage isLoader={isLoader} />
             }
           />
           <Route path="*" element={
@@ -126,7 +132,8 @@ function App() {
         </Routes>
       </main>
       <Footer />
-    </>
+      </CardContext.Provider> 
+    </UserContext.Provider>
   );
 }
 

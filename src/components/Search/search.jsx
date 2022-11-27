@@ -33,11 +33,11 @@ function Search({handleFormSubmit, handleChangeInput}) {
         {inputText ?
         <>
           <CloseIcon className='search__btn_clear' onClick={handleClearInput}/>
-          <SearchIcon className='search__btn_search' />
+          <SearchIcon className='search__btn_search' onClick= {handleForm} />
           
         </> 
         :
-        <SearchIcon className='search'/>
+        <SearchIcon className='search' onClick= {handleForm} />
           
         }
 

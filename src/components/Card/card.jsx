@@ -3,12 +3,17 @@ import cn from 'classnames';
 import {ReactComponent as Save} from "./save.svg";
 import { calcDiscountPrice, isLiked } from "../../utils/product";
 import { Link } from "react-router-dom";
+import { UserContext } from "../../context/userContext";
+import { useContext } from "react";
+import { CardContext } from "../../context/cardContext";
 // import save from "./save.svg";
 
-const Card = ({name, discount, _id, likes, wight, description, pictures, price, userCurrent, onLiked}) => {
+const Card = ({name, discount, _id, likes, wight, description, pictures, price}) => {
+	const userCurrent = useContext(UserContext);
+	const {handleLiked: onLiked} = useContext(CardContext);
 	const newPrice = calcDiscountPrice(price, discount);
 	const isLike = isLiked(likes, userCurrent?._id) // есть лайк или нет
-	function handleLiked() {
+	const handleLiked = ()=> {
 		onLiked({_id, likes});
 	}
 	
@@ -23,7 +28,7 @@ const Card = ({name, discount, _id, likes, wight, description, pictures, price, 
 					<Save className="card__favorite-icon"/>
 				</button>
 			</div>
-			<Link to={`/product/${_id}`} className="card__link">
+			<Link to={`/product/${_id}/#`} className="card__link">
 				<img src={pictures} alt={description} className="card__image"/>
 				<div className="card__desc">
 					<span className={discount !==0 ? "card__old-price" : "card__price"}>{price}&nbsp;₽</span>

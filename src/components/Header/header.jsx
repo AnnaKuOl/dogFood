@@ -1,7 +1,10 @@
 
+import { useContext } from "react";
+import { UserContext } from "../../context/userContext";
 import s from "./index.module.css";
 
-function Header({children, user, onUpdateUser}) {
+function Header({children, onUpdateUser}) {
+  const userCurrent = useContext(UserContext)
   const handleupDateUser = (e) => {
     e.preventDefault();
     onUpdateUser({name: 'Anna Kurashko', about: 'student'})
@@ -9,8 +12,8 @@ function Header({children, user, onUpdateUser}) {
   return (
     <header className={s.header}>
       <div className="container">
-        {user?.email && <span>{user?.email}</span>}
-        {user?.name && <span>{user?.name}</span>}
+        {userCurrent?.email && <span>{userCurrent?.email}</span>}
+        {userCurrent?.name && <span>{userCurrent?.name}</span>}
         {/* <button className="btn" onClick = {handleupDateUser}>Изменить</button> */}
         <div className={s.wrapper}>
             {children}
