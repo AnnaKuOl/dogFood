@@ -1,0 +1,14 @@
+.notFound {
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+.title {
+    color: rgba(61, 64, 129, 0.788);
+}
+.svg {
+    fill: rgba(61, 64, 129, 0.788);
+}

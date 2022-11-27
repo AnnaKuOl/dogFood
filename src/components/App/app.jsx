@@ -15,6 +15,7 @@ import { isLiked } from "../../utils/product";
 import { CatalogPage } from "../../pages/CatalogPage/catalog-page";
 import { ProductPage } from "../../pages/ProductPage/product-page";
 import { Route, Routes } from "react-router-dom";
+import { NotFoundPage } from "../../pages/NotFoundPage/not-found-page";
 
 function App() {
   const [cards, setCards] = useState([]); //состояние карточек
@@ -119,6 +120,9 @@ function App() {
               <ProductPage userCurrent={userCurrent} isLoader={isLoader} />
             }
           />
+          <Route path="*" element={
+            <NotFoundPage/>
+          }/>
         </Routes>
       </main>
       <Footer />
