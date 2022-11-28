@@ -18,6 +18,7 @@ import { Route, Routes, ScrollRestoration } from "react-router-dom";
 import { NotFoundPage } from "../../pages/NotFoundPage/not-found-page";
 import { UserContext } from "../../context/userContext";
 import { CardContext } from "../../context/cardContext";
+import { FaqPage } from "../../pages/FAQPage/faq-page";
 
 function App() {
   const [cards, setCards] = useState([]); //состояние карточек
@@ -112,23 +113,16 @@ function App() {
         <Routes>
           <Route  path="/" element={
               <>
-              <SearchInfo searchText={searchQuery} />
-              <CatalogPage
-                isLoader={isLoader}
-
-              /></>
-              
-            }
-          />
+                <SearchInfo searchText={searchQuery} />
+                <CatalogPage isLoader={isLoader} />
+              </>              
+            }/>
           <Route 
             path="/product/:id"
-            element={
-              <ProductPage isLoader={isLoader} />
-            }
+            element={<ProductPage isLoader={isLoader} />}
           />
-          <Route path="*" element={
-            <NotFoundPage/>
-          }/>
+          <Route path = "/faq" element = {<FaqPage/>}/>
+          <Route path="*" element={<NotFoundPage/>}/>
         </Routes>
       </main>
       <Footer />
