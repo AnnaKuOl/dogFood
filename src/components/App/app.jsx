@@ -92,7 +92,7 @@ function App() {
         return upDateCard;
        })
        
-      }, [userCurrent]);
+      }, [userCurrent, cards]);
 
   return (
     <UserContext.Provider value={userCurrent}>

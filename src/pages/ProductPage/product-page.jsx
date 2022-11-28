@@ -1,37 +1,24 @@
 
 import { useContext } from "react";
-import { useEffect, useState, useCallback } from "react";
+import { useCallback } from "react";
 import { useParams } from "react-router-dom";
 import NotFound from "../../components/NotFound/not-found";
 import Product from "../../components/Product/product";
 import Spinner from "../../components/Spinner";
 import { CardContext } from "../../context/cardContext";
-import { UserContext } from "../../context/userContext";
+import { useApi } from "../../hooks/useApi";
 import api from "../../utils/api";
-import { isLiked } from "../../utils/product";
 
 
-export const ProductPage = ({isLoader }) => {
-  const userCurrent = useContext(UserContext);
-  const {handleLiked: handleProductLike} = useContext(CardContext); 
-  const [product, setProduct] = useState(null);
+
+export const ProductPage = () => {
+
   const {id} = useParams();
-  const [errorState, setErrorState]=useState(null)
-  
-  
-  useEffect(()=>{
-    // setIsLoader(true) 
-    api.getProductbyId(id)
-      .then((productData)=>{
+  const {handleLiked: handleProductLike} = useContext(CardContext); 
 
-        setProduct(productData) 
-      } )      
-      .catch(err => setErrorState(err) )
-      // .finally(()=>{
-      //   setIsLoader(false) 
-      // })
-    
-  },[])
+ 
+  const handleGetProduct = useCallback((() =>  api.getProductbyId(id)), [id]) 
+  const {data: product, setData: setProduct, error: errorState, loading: isLoader} = useApi(handleGetProduct);
 
  
   const handleLiked = useCallback(() => {
@@ -39,7 +26,7 @@ export const ProductPage = ({isLoader }) => {
     handleProductLike(product).then((updateProduct) => {
             setProduct(updateProduct);
         });
-  }, [product, handleProductLike, userCurrent ]);
+  }, [product, handleProductLike, setProduct ]);
 
   return (
     <>
