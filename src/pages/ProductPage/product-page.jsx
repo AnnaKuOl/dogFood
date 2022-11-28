@@ -15,8 +15,6 @@ export const ProductPage = () => {
 
   const {id} = useParams();
   const {handleLiked: handleProductLike} = useContext(CardContext); 
-
- 
   const handleGetProduct = useCallback((() =>  api.getProductbyId(id)), [id]) 
   const {data: product, setData: setProduct, error: errorState, loading: isLoader} = useApi(handleGetProduct);
 
