@@ -4,26 +4,27 @@ import {ReactComponent as Save} from "./img/save.svg"
 import truck from "./img/truck.svg"
 import quality from "./img/quality.svg"
 import {calcDiscountPrice, isLiked, createMarkup} from "../../utils/product.js"
-import { ButtonBack } from "../ButtonBack/button-back";
-import { useNavigate } from "react-router-dom";
+
 import { useContext } from "react";
 import { UserContext } from "../../context/userContext";
+import { ContentHeader } from "../ContentHeader/content-header";
+import { useNavigate } from "react-router-dom";
 const Product = ({pictures, likes=[], tags, _id, name, price, discount, wight, description, reviews, onProductLike }) => {
-    const userCurrent = useContext(UserContext)
+    const {userCurrent} = useContext(UserContext)
     const newPrice = calcDiscountPrice(price, discount); 
     const descriptionHTML = createMarkup(description);
     const isLike = isLiked(likes, userCurrent?._id) 
-    const navigate = useNavigate();
+
     return (
         <>
-            <div >
-                <ButtonBack navigate= {navigate}/>
-                <h1 className={s.productTitle}>{name}</h1>
+            <ContentHeader title={name} >
                 <div>
-                <span>Артикул:</span> <b>{_id &&_id.slice(0,6)}</b>
+                    <span>Артикул:</span> <b>{_id &&_id.slice(0,6)}</b>
                 </div>
-                
-            </div>
+
+            </ContentHeader>
+            
+
             <div className={s.product}>
                 <div className={s.imgWrapper}>
                     <img src={pictures} alt={name} />

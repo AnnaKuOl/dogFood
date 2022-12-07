@@ -6,6 +6,7 @@ import viber from "./img/viber.svg";
 import whatsapp from "./img/whatsapp.svg";
 import vk from "./img/vk.svg";
 import Logo from "../Logo/logo";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
 	return (
@@ -13,7 +14,7 @@ const Footer = () => {
 			<div className="container">
 				<div className="footer__wrapper">
 					<div className="footer__col">
-						<Logo className="logo footer__logo" href="#" title="Логотип" aria-hidden={true}/>
+						<Logo className="logo footer__logo" title="Логотип" aria-hidden={true}/>
 						<p className="footer__copyright">
 							© «Интернет-магазин DogFood.ru»
 						</p>
@@ -39,9 +40,9 @@ const Footer = () => {
 							<a href="/catalogue" className="menu-bottom__item">
 								Оплата и доставка
 							</a>
-							<a href="/catalogue" className="menu-bottom__item">
+							<Link to="/faq" className="menu-bottom__item">
 								Часто спрашивают
-							</a>
+							</Link>
 							<a href="/catalogue" className="menu-bottom__item">
 								Обратная связь
 							</a>

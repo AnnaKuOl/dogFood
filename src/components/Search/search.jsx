@@ -19,6 +19,7 @@ function Search({handleFormSubmit, handleChangeInput}) {
     e.preventDefault();
     navigate('/')
     handleFormSubmit(inputText);
+    setInputText ("");
 
   }
 

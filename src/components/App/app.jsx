@@ -19,14 +19,16 @@ import { NotFoundPage } from "../../pages/NotFoundPage/not-found-page";
 import { UserContext } from "../../context/userContext";
 import { CardContext } from "../../context/cardContext";
 import { FaqPage } from "../../pages/FAQPage/faq-page";
+import { FavoritePage } from "../../pages/FavoritePage/favorite-page";
 
 function App() {
   const [cards, setCards] = useState([]); //состояние карточек
   const [searchQuery, setSearchQuery] = useState(""); // состояние поискового запроса
   const [userCurrent, setUserCurrent] = useState(null); ///состояние текущего пользователя
   const [isLoader, setIsLoader] = useState(true); // состояние спиненра
+  const [favorites, setFavorites] = useState([]);
+  const [currentSort, setCurrentSort] = useState("");
   const debounceSearchQuery = useDebounce(searchQuery, 500); // задержка отправки поискового запроса
-
   
   /* Функция отправки поискового запроса на север  */
 
@@ -43,17 +45,22 @@ function App() {
   }, [searchQuery]);
 
   useEffect(() => {
-    setIsLoader(true); //запуск спинера навремя отправки на сервер запроса и получения ответа
+    setIsLoader(true);//запуск спинера навремя отправки на сервер запроса и получения ответа
     Promise.all([api.getProductsList(), api.getUserInfo()]) // промис для объединения запросов на текущего пользователя и каталог карточек
       .then(([cardsData, userInfo]) => {
         setUserCurrent(userInfo); // установление состояния текущего пользователя исходя из ответа сервера
         setCards(cardsData.products); // установление состояния карточек продукта
+        
+        const favoriteProduct = cardsData.products.filter (product =>  isLiked(product.likes, userInfo._id));
+        setFavorites(favoriteProduct);
       })
+
       .catch((err) => console.log(err))
       .finally(() => {
         setIsLoader(false); //отключение спинера
       });
   }, []);
+
   /* Поиск в реальном времени */
   useEffect(() => {
     // установка зависимости отправки поискового запроса на сервер от функции задержки по заданному времени
@@ -67,9 +74,9 @@ function App() {
 
   /* функция устанвоки значения инпута поиска в состояние поискового запроса */
   const handleChangeInput = (inputVal) => {
-    console.log(inputVal)
+
     setSearchQuery(inputVal);
-    console.log(searchQuery)
+
   };
   /* функция изменения данных пользователя */
   const handleUserUpdate = (userUpdate) => {
@@ -89,18 +96,34 @@ function App() {
         const newProducts = cards.map((card) => {       
           return card._id === upDateCard._id ? upDateCard : card;
         })
-        setCards(newProducts); 
+        if(!isLike) {
+          setFavorites(prevState => [...prevState, upDateCard])
+        } else {
+          setFavorites(prevState => prevState.filter(product => product._id !== upDateCard._id))
+        }
+        setCards(newProducts);
         return upDateCard;
        })
        
       }, [userCurrent, cards]);
+  /* Функция сортировки в зависимости от выбранного значения сортировки*/
+  const sortedData =(currentSort) =>{
+    switch (currentSort) {
+      case "low": setCards(cards.sort(( a , b ) => b.price - a.price)); break;
+      case "cheap": setCards(cards.sort(( a , b ) => a.price - b.price)); break;
+      case "sale": setCards(cards.sort(( a , b ) => b.discount - a.discount)); break;
+      default: setCards(cards.sort(( a , b ) => a.price - b.price));
+    }
+
+
+  }
 
   return (
-    <UserContext.Provider value={userCurrent}>
-    <CardContext.Provider value ={{handleLiked, cards}} >
+    <UserContext.Provider value={{userCurrent, isLoader}}>
+    <CardContext.Provider value ={{currentSort, cards, favorites, handleLiked, sortedData, setCurrentSort}} >
       <Header onUpdateUser={handleUserUpdate}>
         <>
-          <Logo className="logo logo__place-header" />
+          <Logo className="logo logo__place-header" href = "/" />
           <Search 
             handleChangeInput ={handleChangeInput} 
             handleFormSubmit= {handleFormSubmit}/>
@@ -114,12 +137,17 @@ function App() {
           <Route  path="/" element={
               <>
                 <SearchInfo searchText={searchQuery} />
-                <CatalogPage isLoader={isLoader} />
+                <CatalogPage />
+              </>              
+            }/>
+          <Route  path="/favorites" element={
+              <>
+                <FavoritePage />
               </>              
             }/>
           <Route 
             path="/product/:id"
-            element={<ProductPage isLoader={isLoader} />}
+            element={<ProductPage  />}
           />
           <Route path = "/faq" element = {<FaqPage/>}/>
           <Route path="*" element={<NotFoundPage/>}/>
