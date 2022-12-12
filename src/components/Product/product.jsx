@@ -9,17 +9,20 @@ import { useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import { ContentHeader } from "../ContentHeader/content-header";
 import { useNavigate } from "react-router-dom";
+import Rating from "../Rating/rating";
+import { useState } from "react";
 const Product = ({pictures, likes=[], tags, _id, name, price, discount, wight, description, reviews, onProductLike }) => {
     const {userCurrent} = useContext(UserContext)
     const newPrice = calcDiscountPrice(price, discount); 
     const descriptionHTML = createMarkup(description);
     const isLike = isLiked(likes, userCurrent?._id) 
+    const [rating, setRating] = useState(3);
 
     return (
         <>
             <ContentHeader title={name} >
                 <div>
-                    <span>Артикул:</span> <b>{_id &&_id.slice(0,6)}</b>
+                    <span>Артикул:</span> <b>{_id &&_id.slice(0,6)}</b><Rating rating={rating}/>
                 </div>
 
             </ContentHeader>

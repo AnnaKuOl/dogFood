@@ -5,9 +5,10 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 import s from "./index.module.css";
 import {ReactComponent as FavoriteIcon} from "./img/ic-favorite.svg"
+import {ReactComponent as LoginIcon} from "./img/login-arrow.svg"
 import { CardContext } from "../../context/cardContext";
 
-function Header({children, onUpdateUser}) {
+function Header({children, onUpdateUser, setIsActiveModalForm }) {
   const userCurrent = useContext(UserContext);
   const {favorites} = useContext(CardContext)
   // const handleupDateUser = (e) => {
@@ -20,7 +21,10 @@ function Header({children, onUpdateUser}) {
         <div className={s.header__wrapper}>
             {children}
             <div className={s.iconsMenu}>
-              <Link to="/favorites" className={s.favoritesLink}>
+              <button className={s.btnLogin} onClick={()=>{setIsActiveModalForm(true)}}>
+                <LoginIcon className={s.login}/>
+              </button>
+              <Link to="/favorites" className={s.favoritesLink}>               
                 <FavoriteIcon/>
                 {favorites.length!==0 &&
                   <span className={s.iconBubble}>{favorites.length}</span>

@@ -20,6 +20,9 @@ import { UserContext } from "../../context/userContext";
 import { CardContext } from "../../context/cardContext";
 import { FaqPage } from "../../pages/FAQPage/faq-page";
 import { FavoritePage } from "../../pages/FavoritePage/favorite-page";
+import Form from "../Form/form";
+import RegistrationForm from "../Form/registration-form";
+import Modal from "../Modal/modal";
 
 function App() {
   const [cards, setCards] = useState([]); //состояние карточек
@@ -28,6 +31,7 @@ function App() {
   const [isLoader, setIsLoader] = useState(true); // состояние спиненра
   const [favorites, setFavorites] = useState([]);
   const [currentSort, setCurrentSort] = useState("");
+  const [isActiveModalForm, setIsActiveModalForm] = useState(false)
   const debounceSearchQuery = useDebounce(searchQuery, 500); // задержка отправки поискового запроса
   
   /* Функция отправки поискового запроса на север  */
@@ -114,14 +118,20 @@ function App() {
       case "sale": setCards(cards.sort(( a , b ) => b.discount - a.discount)); break;
       default: setCards(cards.sort(( a , b ) => a.price - b.price));
     }
-
+  
 
   }
+  const addContact = useCallback((dataForm) =>{
+    console.log(dataForm);
+  }, [])
 
   return (
     <UserContext.Provider value={{userCurrent, isLoader}}>
     <CardContext.Provider value ={{currentSort, cards, favorites, handleLiked, sortedData, setCurrentSort}} >
-      <Header onUpdateUser={handleUserUpdate}>
+      <Modal active ={isActiveModalForm} setActive ={setIsActiveModalForm}>
+        <RegistrationForm/>
+      </Modal>
+      <Header onUpdateUser={handleUserUpdate} setIsActiveModalForm = {setIsActiveModalForm}>
         <>
           <Logo className="logo logo__place-header" href = "/" />
           <Search 
