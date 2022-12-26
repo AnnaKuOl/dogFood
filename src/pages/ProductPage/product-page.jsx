@@ -32,7 +32,7 @@ export const ProductPage = () => {
         <div className="content__cards">
             {isLoader 
             ? <Spinner /> 
-            : !errorState && <Product {...product} onProductLike = {handleLiked}/>
+            : !errorState && <Product {...product} onProductLike = {handleLiked} setProduct={setProduct}/>
             } 
 
             {!isLoader && errorState && <NotFound title={errorState} buttonText ="На главную"/>}

@@ -28,6 +28,13 @@ class Api {
             body: JSON.stringify(dataUser)
         }).then(onResponce)
     }
+    addReview(productId, data){
+        return fetch(`${this._baseURL}/products/review/${productId}`, {
+            method: 'POST',
+            headers: this._headers,
+            body: JSON.stringify(data)
+        }).then(onResponce)
+    }
 
     search(searchQuery) {
         return fetch(`${this._baseURL}/products/search?query=${searchQuery}`, {

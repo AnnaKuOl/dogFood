@@ -1,6 +1,7 @@
 import {useForm} from "react-hook-form";
+import FormInput from "../FormInput/form-input";
 
-import "./index.css"
+// import "./index.css"
 
  function RegistrationForm() {
     const {register, handleSubmit, formState: {errors}} = useForm();
@@ -10,7 +11,7 @@ import "./index.css"
     return (
         <form onSubmit={handleSubmit(cbSubmit)}>
             <h3 className="form-title">Регистрация</h3>
-            <input 
+            <FormInput 
                 {...register( "name", {
                     minLength: {
                         value: 2,
