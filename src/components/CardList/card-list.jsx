@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { CardContext } from "../../context/cardContext";
 import { UserContext } from "../../context/userContext";
 import Card from "../Card/card";
 import NotFound from "../NotFound/not-found";
@@ -8,7 +7,6 @@ import "./index.css";
 
 const CardList = ({ cards }) => {
   const navigate = useNavigate();
-
   const { isLoader } = useContext(UserContext);
 
   return (

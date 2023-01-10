@@ -13,7 +13,7 @@
 
     opacity: 0;
     pointer-events: none;
-    transition: 0.5s;
+    transition: 0.4s;
 }
 .modal.active {
     opacity: 1;
@@ -24,7 +24,7 @@
     border-radius: 10px;
     background-color: white;
     transform: scale(10);
-    transition: 1s ;
+    transition: 0.4s ;
     max-width: 500px;
 
 }

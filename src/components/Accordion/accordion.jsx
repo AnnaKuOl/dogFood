@@ -1,26 +1,23 @@
 import { useState } from "react";
 import cn from "classnames";
 
-import s from "./index.module.css"
+import s from "./index.module.css";
 
-export const Accordion = ({title, children}) =>{
-    const [selected, setSelected] = useState(false)
+export const Accordion = ({ title, children }) => {
+  const [selected, setSelected] = useState(false);
 
-    function toggleStateAccordion(){
-        setSelected(!selected);
-    }
-    
-    return (
-        <div className={cn(s.accordion, {[s.active]: selected})}>   
-            <button className={s.accordionButton} onClick={toggleStateAccordion}>
-                <p className={s.title}>{title}</p>
-            </button>
-            <div className={s.content}>
-                <p className={s.text}>{children}</p>
-            </div>
+  function toggleStateAccordion() {
+    setSelected(!selected);
+  }
 
-        </div>
-    );
-
-
-}
+  return (
+    <div className={cn(s.accordion, { [s.active]: selected })}>
+      <button className={s.accordionButton} onClick={toggleStateAccordion}>
+        <p className={s.title}>{title}</p>
+      </button>
+      <div className={s.content}>
+        <p className={s.text}>{children}</p>
+      </div>
+    </div>
+  );
+};

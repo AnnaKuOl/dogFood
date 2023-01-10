@@ -12,7 +12,6 @@ import api from "../../utils/api";
 
 
 export const ProductPage = () => {
-
   const {id} = useParams();
   const {handleLiked: handleProductLike} = useContext(CardContext); 
   const handleGetProduct = useCallback((() =>  api.getProductbyId(id)), [id]) 

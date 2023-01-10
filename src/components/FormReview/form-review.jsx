@@ -12,8 +12,6 @@ export const FormReview = ({title="Отзыв о товаре", productId, setPr
   const { register, handleSubmit, reset, formState: { errors }  } = useForm({ mode: "onBlur" });   
   const [rating, setRating] = useState(1);    
   const sendReviewApi = (data) => {
-    console.log({...data, rating});
-    console.log(textReview);
     api.addReview(productId, {...data, rating})
         .then((updateProduct)=>{
             setProduct && setProduct(updateProduct);

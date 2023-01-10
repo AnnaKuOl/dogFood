@@ -1,16 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-
 import Footer from "../Footer/footer";
 import Logo from "../Logo/logo";
 import Search from "../Search/search";
 import Header from "../Header/header";
-
 import SearchInfo from "../SearchInfo/search-info";
 import "./index.css";
-
 import api from "../../utils/api";
 import useDebounce from "../../hooks/useDebounce";
-
 import { calcDiscountPrice, isLiked } from "../../utils/product";
 import { CatalogPage } from "../../pages/CatalogPage/catalog-page";
 import { ProductPage } from "../../pages/ProductPage/product-page";
@@ -20,12 +16,10 @@ import { UserContext } from "../../context/userContext";
 import { CardContext } from "../../context/cardContext";
 import { FaqPage } from "../../pages/FAQPage/faq-page";
 import { FavoritePage } from "../../pages/FavoritePage/favorite-page";
-
 import Modal from "../Modal/modal";
 import { Registration } from "../Registration/registration";
 import { Login } from "../Login/login";
 import { ResetPassword } from "../ResetPassword/reset-password";
-
 
 function App() {
   const [cards, setCards] = useState([]); //состояние карточек
@@ -125,16 +119,34 @@ function App() {
   const sortedData = (currentSort) => {
     switch (currentSort) {
       case "low":
-        setCards(cards.sort((a, b) => (calcDiscountPrice(b.price, b.discount))- (calcDiscountPrice(a.price, a.discount))));
+        setCards(
+          cards.sort(
+            (a, b) =>
+              calcDiscountPrice(b.price, b.discount) -
+              calcDiscountPrice(a.price, a.discount)
+          )
+        );
         break;
       case "cheap":
-        setCards(cards.sort((a, b) => (calcDiscountPrice(a.price, a.discount))- (calcDiscountPrice(b.price, b.discount))));
+        setCards(
+          cards.sort(
+            (a, b) =>
+              calcDiscountPrice(a.price, a.discount) -
+              calcDiscountPrice(b.price, b.discount)
+          )
+        );
         break;
       case "sale":
         setCards(cards.sort((a, b) => b.discount - a.discount));
         break;
       default:
-        setCards(cards.sort((a, b) => (calcDiscountPrice(a.price, a.discount))- (calcDiscountPrice(b.price, b.discount))));
+        setCards(
+          cards.sort(
+            (a, b) =>
+              calcDiscountPrice(a.price, a.discount) -
+              calcDiscountPrice(b.price, b.discount)
+          )
+        );
     }
   };
   const addContact = useCallback((dataForm) => {

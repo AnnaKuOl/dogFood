@@ -6,8 +6,6 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 import { useContext } from "react";
 import { CardContext } from "../../context/cardContext";
-import ContentLoader from "react-content-loader";
-// import save from "./save.svg";
 
 const Card = ({
   name,

@@ -12,9 +12,7 @@ import {
 import { useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import { ContentHeader } from "../ContentHeader/content-header";
-import { useNavigate } from "react-router-dom";
 import Rating from "../Rating/rating";
-import { useState } from "react";
 import { useMemo } from "react";
 import { FormReview } from "../FormReview/form-review";
 
